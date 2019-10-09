@@ -5,6 +5,22 @@
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.css"/>
 		<meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1"/>
 		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+		<style>
+			.error {
+				position: absolute;
+				bottom: -40px;
+				color: #fd0505;
+			}
+			.errorEmail {
+				left: 25%;
+			}
+			.errorTask {
+				left: 50%;
+			}
+			.errorPass {
+				right: 30%;
+			}
+		</style>
 	</head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark box-shadow">
@@ -15,11 +31,11 @@
 			</button>
 
 			<div class="collapse navbar-collapse" style="justify-content: flex-end;" id="navbar">
-				<form class="form-inline my-2 my-lg-0" action="login.php" method="post">
+				<form class="form-inline my-2 my-lg-0" action="login.php" method="post" id="loginForm">
 					<?php if (!isset($_SESSION['login'])) {?>
-					<input class="form-control mr-sm-2" type="text" name="login" placeholder="Логин" />
-					<input class="form-control mr-sm-2" type="text" name="password" placeholder="Пароль" />
-					<button class="btn btn-outline-success mr-sm-2" name="submit" type="submit">Войти</button>
+					<input class="form-control mr-sm-2" type="text" id="login" name="login" placeholder="Логин" />
+					<input class="form-control mr-sm-2" type="text" id="password" name="password" placeholder="Пароль" />
+					<button class="btn btn-outline-success mr-sm-2" name="submit" id="submit" type="submit">Войти</button>
 					<?php } else if (isset($_SESSION['login'])) { ?>
 					<a href="logout.php" class="btn btn-outline-success mr-sm-2">Выйти</a>
 					<?php } ?>
@@ -38,12 +54,8 @@
 			<div class="col-md-10">
 					<form class="form-inline" id="taskForm" action="add_task.php" method="post">
 						<input type="text" class="form-control mr-sm-2" name="name" id="name"/>
-						<span class="form_error">Пожалуйста введите имя</span>
 						<input type="text" class="form-control mr-sm-2" name="email" id="email"/>
-						<span class="form_error">Пожалуйста введите email</span>
-						<span class="form_error" id="invalid_email">Неправильный формат email</span>
 						<input type="text" class="form-control mr-sm-2" name="task" id="task"/>
-						<span class="form_error">Пожалуйста введите задачу</span>
 						<button class="btn btn-primary form-control" id="submit" name="add">Создать задачу</button>
 					</form>
 			</div>
@@ -100,40 +112,43 @@
 		</div>
 	</div>
 
+
 <script type="text/javascript">
-    $(document).ready(function() {
-      $('.form_error').hide();
-      $('#submit').click(function(){
-           var name = $('#name').val();
-           var email = $('#email').val();
-           var task = $('#task').val();
-           if(name== ''){
-              $('#name').next().show();
-              return false;
-            }
-            if(email== ''){
-               $('#email').next().show();
-               return false;
-            }
-            if(IsEmail(email)==false){
-                $('#invalid_email').show();
-                return false;
-            }
-            if(task== ''){
-                $('#task').next().show();
-                return false;
-            }
-          });
-      });
-      function IsEmail(email) {
-        var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-        if(!regex.test(email)) {
-           return false;
-        }else{
-           return true;
-        }
-      }
-  </script>
+$(document).ready(function() {
+	$('#taskForm').submit(function() {
+		var name = $('#name').val();
+		var email = $('#email').val();
+		var task = $('#task').val();
+	
+		$(".error").remove();
+	
+		if (name.length == '') {
+			$('#name').after('<span class="error">Введите имя</span>');
+		}
+		if (email.length == '') {
+			$('#email').after('<span class="error errorEmail">Нужно ввести email</span>');
+		} 
+		if (task.length == '') {
+			$('#task').after('<span class="error errorTask">Пожалуйста заполните задачу</span>');
+		}
+	});
+
+	$('#loginForm').submit(function() {
+		var login = $('#login').val();
+		var password = $('#password').val();
+		var $form = $(this);
+	
+		$(".error").remove();
+
+		if (login.length == '') {
+			$('#login').after('<span class="error">Введите логин</span>');
+		} 
+		if (password.length == '') {
+			$('#password').after('<span class="error errorPass">Введите пароль</span>');
+		}		
+	});
+});
+</script>
 
 </body>
 </html>

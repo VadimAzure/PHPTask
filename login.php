@@ -13,8 +13,7 @@
         $_SESSION['logTrue'] = TRUE;
         $_SESSION['login'] = $_POST['login'];
         //echo 'Вы вошли в систему ' . $_SESSION['login'] . '! <a href="index.php">Вернуться</a>';
-        header('location:index.php');
-        
+        header('location:index.php');     
 	}else{
 		echo "error";
 	}
