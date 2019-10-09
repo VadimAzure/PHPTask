@@ -4,6 +4,7 @@
 	<head>
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.css"/>
 		<meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1"/>
+		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 	</head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark box-shadow">
@@ -35,11 +36,15 @@
 			<?php } ?>
 			<hr style="border-top:1px dotted #ccc;"/>
 			<div class="col-md-10">
-					<form class="form-inline" action="add_task.php" method="post">
-						<input type="text" class="form-control mr-sm-2" name="name"/>
-						<input type="text" class="form-control mr-sm-2" name="email"/>
-						<input type="text" class="form-control mr-sm-2" name="task"/>
-						<button class="btn btn-primary form-control" name="add">Создать задачу</button>
+					<form class="form-inline" id="taskForm" action="add_task.php" method="post">
+						<input type="text" class="form-control mr-sm-2" name="name" id="name"/>
+						<span class="form_error">Пожалуйста введите имя</span>
+						<input type="text" class="form-control mr-sm-2" name="email" id="email"/>
+						<span class="form_error">Пожалуйста введите email</span>
+						<span class="form_error" id="invalid_email">Неправильный формат email</span>
+						<input type="text" class="form-control mr-sm-2" name="task" id="task"/>
+						<span class="form_error">Пожалуйста введите задачу</span>
+						<button class="btn btn-primary form-control" id="submit" name="add">Создать задачу</button>
 					</form>
 			</div>
 			<br /><br /><br />
@@ -47,7 +52,7 @@
 				<thead>
 					<tr>
 						<th>#</th>
-						<th>ФИО</th>
+						<th>Имя пользователя</th>
 						<th>E-Mail</th>
 						<th>Задачи</th>
 						<th>Статус</th>
@@ -63,6 +68,7 @@
 						if(!$conn){
 							die("Error: Cannot connect to the database");
 						}
+
 						$query = $conn->query("SELECT * FROM `task` ORDER BY `task_id` ASC");
 						$count = 1;
 						while($fetch = $query->fetch_array()){
@@ -88,9 +94,46 @@
 					<?php
 						}
 					?>
+					
 				</tbody>
 			</table>
 		</div>
 	</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+      $('.form_error').hide();
+      $('#submit').click(function(){
+           var name = $('#name').val();
+           var email = $('#email').val();
+           var task = $('#task').val();
+           if(name== ''){
+              $('#name').next().show();
+              return false;
+            }
+            if(email== ''){
+               $('#email').next().show();
+               return false;
+            }
+            if(IsEmail(email)==false){
+                $('#invalid_email').show();
+                return false;
+            }
+            if(task== ''){
+                $('#task').next().show();
+                return false;
+            }
+          });
+      });
+      function IsEmail(email) {
+        var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        if(!regex.test(email)) {
+           return false;
+        }else{
+           return true;
+        }
+      }
+  </script>
+
 </body>
 </html>
