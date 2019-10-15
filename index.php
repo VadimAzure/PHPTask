@@ -75,7 +75,7 @@
 				</thead>
 				<tbody>
 					<?php
-						$conn = new mysqli("localhost", "root", "", "task_test");
+						$conn = new mysqli("localhost", "vadimphptest", "Tsu123456", "vadimphptest");
 						$conn->set_charset("utf8");
 						if(!$conn){
 							die("Error: Cannot connect to the database");

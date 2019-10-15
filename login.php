@@ -10,10 +10,8 @@
 	$row = mysqli_num_rows($query);
  
 	if($row > 0){
-        $_SESSION['logTrue'] = TRUE;
         $_SESSION['login'] = $_POST['login'];
-        //echo 'Вы вошли в систему ' . $_SESSION['login'] . '! <a href="index.php">Вернуться</a>';
-        header('location:index.php');     
+        //echo 'Вы вошли в систему ' . $_SESSION['login'] . '! <a href="index.php">Вернуться</a>';  
 	}else{
 		echo "error";
 	}
